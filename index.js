@@ -1,4 +1,5 @@
 'use strict'
+let { useEffect } = require('react')
 
 function validateEvt(evts) {
   if (!Array.isArray(evts)) {
@@ -11,28 +12,30 @@ function isValidNode(node) {
 }
 
 function useListeners(node, evts = []) {
-  if (isValidNode(node)) {
-    evts.forEach(evt => {
-      try {
-        validateEvt(evt)
-        node.current.addEventListener(...evt)
-      } catch (e) {
-        // Handle/warn/inform skipped
-      }
-    })
-  }
-  return () => {
-    if (isValidNode) {
+  useEffect(() => {
+    if (isValidNode(node)) {
       evts.forEach(evt => {
         try {
           validateEvt(evt)
-          node.current.removeEventListener(...c)
+          node.current.addEventListener(...evt)
         } catch (e) {
           // Handle/warn/inform skipped
         }
       })
     }
-  }
+    return () => {
+      if (isValidNode) {
+        evts.forEach(evt => {
+          try {
+            validateEvt(evt)
+            node.current.removeEventListener(...c)
+          } catch (e) {
+            // Handle/warn/inform skipped
+          }
+        })
+      }
+    }
+  })
 }
 
 module.exports = useListeners
