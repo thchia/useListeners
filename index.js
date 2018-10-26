@@ -35,7 +35,7 @@ function useListeners(node, evts = []) {
         })
       }
     }
-  })
+  }, [])
 }
 
 module.exports = useListeners
